@@ -1,0 +1,3 @@
+<include file="$(find robotcraft2023_driver_g11)/launch/robot_firmware.launch"/>
+<include file="$(find robotcraft2023_driver_g11)/launch/robot_driver.launch"/>
+<include file="$(find robotcraft_robot_description)/launch/display_robotcraft.launch"/>
