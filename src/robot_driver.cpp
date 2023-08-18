@@ -6,7 +6,18 @@
 #include <sensor_msgs/Range.h>
 #include <std_msgs/Float32.h>
 #include <geometry_msgs/Pose2D.h>
+#include <geometry_msgs/Twist.h>
 
+
+
+
+geometry_msgs::Twist move_cmd;
+
+
+void cmdVelCallback(const geometry_msgs::Twist& msg)    //geometry_msgs::PoseStamped
+{
+    move_cmd = msg;
+}
 
 void poseCallback(const geometry_msgs::Pose2D& pose_msg)    //geometry_msgs::PoseStamped
 {
@@ -19,6 +30,7 @@ void poseCallback(const geometry_msgs::Pose2D& pose_msg)    //geometry_msgs::Pos
     odom_msg.pose.pose.position.x = pose_msg.x;
     odom_msg.pose.pose.position.y = pose_msg.y;
     odom_msg.pose.pose.position.z = 0.0;
+    odom_msg.twist.twist = move_cmd;
     odom_msg.pose.pose.orientation = odom_quat;
 
     // Publish Odometry message
@@ -92,8 +104,12 @@ int main(int argc, char** argv)
 
     // Subscribe to the /pose topic
     ros::Subscriber pose_sub = nh.subscribe("pose", 100, poseCallback);
+    ros::Subscriber cmd_vel_sub = nh.subscribe("cmd_vel", 100, cmdVelCallback);
+    ros::Subscriber front_distance_sub = nh.subscribe("front_distance", 100, frontDistanceCallback);
+    ros::Subscriber right_distance_sub = nh.subscribe("right_distance", 100, rightDistanceCallback);
+    ros::Subscriber left_distance_sub = nh.subscribe("left_distance", 100, leftDistanceCallback);
 
-
+    
     ros::spin();
 
     return 0;
